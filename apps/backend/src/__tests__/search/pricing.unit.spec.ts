@@ -1,4 +1,4 @@
-import { toProductPricing } from "../pricing";
+import { toProductPricing } from "../../search/helpers/pricing";
 
 const variant = (calculated: number | null, original?: number | null) => ({
   calculated_price: { calculated_amount: calculated, original_amount: original },
