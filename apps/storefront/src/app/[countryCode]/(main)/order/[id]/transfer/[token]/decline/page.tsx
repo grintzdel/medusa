@@ -1,5 +1,5 @@
 import { declineTransferRequest } from "@lib/data/orders"
-import { Heading, Text } from "@medusajs/ui"
+import { Text } from "@medusajs/ui"
 import TransferImage from "@modules/order/components/transfer-image"
 
 export default async function TransferPage({
@@ -17,21 +17,24 @@ export default async function TransferPage({
       <div className="flex flex-col gap-y-6">
         {success && (
           <>
-            <Heading level="h1" className="text-xl text-zinc-900">
-              Order transfer declined!
-            </Heading>
-            <Text className="text-zinc-600">
-              Transfer of order {id} has been successfully declined.
+            <h1 className="ec-display text-[clamp(2rem,4vw,2.75rem)] text-ecaille-lien">
+              Transfert refusé !
+            </h1>
+            <Text className="text-ui-fg-subtle">
+              Le transfert de la commande {id} a bien été refusé.
             </Text>
           </>
         )}
         {!success && (
           <>
-            <Text className="text-zinc-600">
-              There was an error declining the transfer. Please try again.
+            <Text className="text-ui-fg-subtle">
+              Une erreur est survenue lors du refus du transfert. Veuillez
+              réessayer.
             </Text>
             {error && (
-              <Text className="text-red-500">Error message: {error}</Text>
+              <Text className="text-ecaille-piment">
+                Message d&apos;erreur : {error}
+              </Text>
             )}
           </>
         )}

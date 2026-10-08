@@ -13,7 +13,8 @@ const LineItemUnitPrice = ({
   style = "default",
   currencyCode,
 }: LineItemUnitPriceProps) => {
-  const { total, original_total } = item
+  const total = item.total ?? 0
+  const original_total = item.original_total ?? 0
   const hasReducedPrice = total < original_total
 
   const percentage_diff = Math.round(
@@ -21,12 +22,12 @@ const LineItemUnitPrice = ({
   )
 
   return (
-    <div className="flex flex-col text-ui-fg-muted justify-center h-full">
+    <div className="flex flex-col text-ui-fg-muted justify-center h-full tabular-nums">
       {hasReducedPrice && (
         <>
           <p>
             {style === "default" && (
-              <span className="text-ui-fg-muted">Original: </span>
+              <span className="text-ui-fg-muted">Prix initial : </span>
             )}
             <span
               className="line-through"
@@ -39,13 +40,13 @@ const LineItemUnitPrice = ({
             </span>
           </p>
           {style === "default" && (
-            <span className="text-ui-fg-interactive">-{percentage_diff}%</span>
+            <span className="text-ecaille-piment">-{percentage_diff}%</span>
           )}
         </>
       )}
       <span
         className={clx("text-base-regular", {
-          "text-ui-fg-interactive": hasReducedPrice,
+          "text-ecaille-piment": hasReducedPrice,
         })}
         data-testid="product-unit-price"
       >

@@ -43,24 +43,32 @@ export default function CategoryTemplate({
     >
       <RefinementList sortBy={sort} data-testid="sort-by-container" />
       <div className="w-full">
-        <div className="flex flex-row mb-8 text-2xl-semi gap-4">
-          {parents &&
-            parents.map((parent) => (
-              <span key={parent.id} className="text-ui-fg-subtle">
-                <LocalizedClientLink
-                  className="mr-4 hover:text-black"
-                  href={`/categories/${parent.handle}`}
-                  data-testid="sort-by-link"
-                >
-                  {parent.name}
-                </LocalizedClientLink>
-                /
-              </span>
-            ))}
-          <h1 data-testid="category-page-title">{category.name}</h1>
+        <div className="mb-8 flex flex-col gap-2 border-b-2 border-ecaille-encre pb-3">
+          {parents.length > 0 && (
+            <div className="ec-eyebrow flex flex-row flex-wrap gap-2">
+              {parents.map((parent) => (
+                <span key={parent.id}>
+                  <LocalizedClientLink
+                    className="mr-2 hover:text-ecaille-lien"
+                    href={`/categories/${parent.handle}`}
+                    data-testid="sort-by-link"
+                  >
+                    {parent.name}
+                  </LocalizedClientLink>
+                  /
+                </span>
+              ))}
+            </div>
+          )}
+          <h1
+            data-testid="category-page-title"
+            className="ec-display text-[clamp(2.75rem,5vw,4rem)] text-ecaille-lien"
+          >
+            {category.name}
+          </h1>
         </div>
         {category.description && (
-          <div className="mb-8 text-base-regular">
+          <div className="mb-8 text-base-regular text-ecaille-brume">
             <p>{category.description}</p>
           </div>
         )}

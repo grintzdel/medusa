@@ -2,6 +2,93 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+:root {
+  --ec-outremer: 30 58 168;
+  --ec-lien: 30 58 168;
+  --ec-citron: 244 210 62;
+  --ec-encre: 16 26 58;
+  --ec-nuit: 16 26 58;
+  --ec-sel: 243 245 248;
+  --ec-surface: 255 255 255;
+  --ec-tuile: 230 235 243;
+  --ec-ligne: 207 214 228;
+  --ec-brume: 86 96 126;
+  --ec-piment: 217 56 30;
+  --ec-algue: 47 125 91;
+  --ec-sardine: 169 180 198;
+
+  --bg-base: rgb(var(--ec-surface));
+  --bg-base-hover: rgb(var(--ec-sel));
+  --bg-subtle: rgb(var(--ec-sel));
+  --bg-subtle-hover: rgb(var(--ec-tuile));
+  --bg-component: rgb(var(--ec-sel));
+  --bg-component-hover: rgb(var(--ec-tuile));
+  --bg-field: rgb(var(--ec-surface));
+  --bg-field-hover: rgb(var(--ec-sel));
+  --bg-field-component: rgb(var(--ec-surface));
+  --bg-field-component-hover: rgb(var(--ec-sel));
+  --bg-highlight: rgb(232 236 250);
+  --bg-interactive: rgb(var(--ec-outremer));
+  --fg-base: rgb(var(--ec-encre));
+  --fg-subtle: rgb(var(--ec-brume));
+  --fg-muted: rgb(107 117 145);
+  --fg-interactive: rgb(var(--ec-lien));
+  --fg-interactive-hover: rgb(23 46 134);
+  --fg-error: rgb(194 46 21);
+  --border-base: rgb(220 226 236);
+  --border-strong: rgb(var(--ec-ligne));
+  --border-interactive: rgb(var(--ec-outremer));
+  --contrast-fg-primary: rgb(255 255 255);
+  --button-inverted: rgb(var(--ec-outremer));
+  --button-inverted-hover: rgb(23 46 134);
+  --button-inverted-pressed: rgb(18 37 112);
+  --buttons-inverted: 0px 0.75px 0px 0px rgba(255, 255, 255, 0.2) inset, 0px 1px 2px 0px rgba(16, 26, 58, 0.3),
+    0px 0px 0px 1px rgb(23 46 134);
+  --buttons-inverted-focus: 0px 0.75px 0px 0px rgba(255, 255, 255, 0.2) inset, 0px 0px 0px 1px rgb(23 46 134),
+    0px 0px 0px 2px rgb(var(--ec-surface)), 0px 0px 0px 4px rgb(var(--ec-citron));
+  --borders-interactive-with-active: 0px 0px 0px 4px rgba(30, 58, 168, 0.2), 0px 0px 0px 1px rgb(var(--ec-outremer));
+}
+
+.dark {
+  color-scheme: dark;
+  --ec-outremer: 61 91 224;
+  --ec-lien: 157 176 255;
+  --ec-encre: 231 236 246;
+  --ec-nuit: 6 10 26;
+  --ec-sel: 10 17 40;
+  --ec-surface: 17 26 56;
+  --ec-tuile: 23 34 74;
+  --ec-ligne: 38 50 92;
+  --ec-brume: 152 163 194;
+  --ec-piment: 255 106 77;
+  --ec-algue: 92 199 149;
+  --ec-sardine: 108 120 152;
+
+  --bg-highlight: rgb(29 42 94);
+  --bg-disabled: rgb(var(--ec-tuile));
+  --fg-muted: rgb(120 131 165);
+  --fg-disabled: rgb(88 99 135);
+  --fg-interactive-hover: rgb(196 207 255);
+  --fg-error: rgb(255 128 102);
+  --fg-on-inverted: rgb(255 255 255);
+  --border-base: rgb(var(--ec-ligne));
+  --border-strong: rgb(52 66 115);
+  --button-inverted-hover: rgb(83 112 240);
+  --button-inverted-pressed: rgb(48 74 196);
+  --buttons-inverted: 0px 0.75px 0px 0px rgba(255, 255, 255, 0.16) inset, 0px 1px 2px 0px rgba(0, 0, 0, 0.4),
+    0px 0px 0px 1px rgb(48 74 196);
+  --buttons-inverted-focus: 0px 0.75px 0px 0px rgba(255, 255, 255, 0.16) inset, 0px 0px 0px 1px rgb(48 74 196),
+    0px 0px 0px 2px rgb(var(--ec-sel)), 0px 0px 0px 4px rgb(var(--ec-citron));
+  --button-neutral: rgb(var(--ec-tuile));
+  --button-neutral-hover: rgb(31 45 96);
+  --button-neutral-pressed: rgb(38 54 112);
+  --borders-interactive-with-active: 0px 0px 0px 4px rgba(157, 176, 255, 0.25), 0px 0px 0px 1px rgb(var(--ec-lien));
+}
+
+body {
+  @apply bg-ecaille-sel font-sans text-ecaille-encre antialiased;
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -35,9 +122,9 @@
   select:-webkit-autofill,
   select:-webkit-autofill:hover,
   select:-webkit-autofill:focus {
-    border: 1px solid #212121;
-    -webkit-text-fill-color: #212121;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    border: 1px solid rgb(var(--ec-ligne));
+    -webkit-text-fill-color: rgb(var(--ec-encre));
+    -webkit-box-shadow: 0 0 0px 1000px rgb(var(--ec-surface)) inset;
     transition: background-color 5000s ease-in-out 0s;
   }
 
@@ -50,12 +137,88 @@
 }
 
 @layer components {
+  .ec-display {
+    @apply font-display uppercase;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .ec-heading {
+    @apply font-display uppercase;
+    font-weight: 850;
+    font-stretch: 70%;
+    line-height: 1;
+    text-wrap: balance;
+  }
+
+  .ec-eyebrow {
+    @apply font-mono text-xs uppercase tracking-[0.12em] text-ecaille-brume;
+  }
+
+  .ec-tin-frame {
+    container-type: inline-size;
+    @apply w-full max-w-full;
+  }
+
+  .ec-tin {
+    --tin: #1e3aa8;
+    --tin-band: #f4d23e;
+    --tin-band-ink: #101a3a;
+    @apply relative flex aspect-[3/2] w-full max-w-full items-center justify-center;
+    border-radius: clamp(4px, 4cqw, 18px);
+    background: var(--tin);
+    box-shadow:
+      inset 0 0 0 clamp(2px, 2.5cqw, 5px) color-mix(in srgb, var(--tin) 70%, #000),
+      inset 0 0 0 clamp(3px, 3.5cqw, 7px) color-mix(in srgb, var(--tin) 70%, #fff);
+  }
+
+  .ec-tin::before {
+    content: "";
+    @apply absolute left-[8%] top-[10%] h-[14%] w-[16%] rounded-[50%];
+    border: 3px solid color-mix(in srgb, var(--tin) 55%, #fff);
+  }
+
+  .ec-tin[data-tone="citron"] {
+    --tin: #f4d23e;
+    --tin-band: #1e3aa8;
+    --tin-band-ink: #fff;
+  }
+
+  .ec-tin[data-tone="piment"] {
+    --tin: #d9381e;
+    --tin-band: #f3f5f8;
+    --tin-band-ink: #101a3a;
+  }
+
+  .ec-tin[data-tone="algue"] {
+    --tin: #2f7d5b;
+    --tin-band: #f4d23e;
+    --tin-band-ink: #101a3a;
+  }
+
+  .ec-tin[data-tone="sardine"] {
+    --tin: #a9b4c6;
+    --tin-band: #101a3a;
+    --tin-band-ink: #f4d23e;
+  }
+
+  .ec-tin-band {
+    @apply max-w-[80%] -rotate-[4deg] px-[0.6em] py-[0.35em] text-center font-display uppercase leading-none tracking-[0.04em];
+    background: var(--tin-band);
+    color: var(--tin-band-ink);
+    font-weight: 800;
+    font-stretch: 70%;
+  }
+
   .content-container {
     @apply max-w-[1440px] w-full mx-auto px-6;
   }
 
   .contrast-btn {
-    @apply px-4 py-2 border border-black rounded-full hover:bg-black hover:text-white transition-colors duration-200 ease-in;
+    @apply px-4 py-2 border border-ecaille-encre rounded-ctl hover:bg-ecaille-encre hover:text-ecaille-sel transition-colors duration-200 ease-in;
   }
 
   .text-xsmall-regular {

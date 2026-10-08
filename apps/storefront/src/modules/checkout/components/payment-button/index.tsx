@@ -40,7 +40,11 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
       )
     default:
-      return <Button disabled>Select a payment method</Button>
+      return (
+        <Button disabled className="rounded-ctl">
+          Choisir un moyen de paiement
+        </Button>
+      )
   }
 }
 
@@ -138,10 +142,11 @@ const StripePaymentButton = ({
         disabled={disabled || notReady}
         onClick={handlePayment}
         size="large"
+        className="rounded-ctl"
         isLoading={submitting}
         data-testid={dataTestId}
       >
-        Place order
+        Passer la commande
       </Button>
       <ErrorMessage
         error={errorMessage}
@@ -178,9 +183,10 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
         isLoading={submitting}
         onClick={handlePayment}
         size="large"
+        className="rounded-ctl"
         data-testid="submit-order-button"
       >
-        Place order
+        Passer la commande
       </Button>
       <ErrorMessage
         error={errorMessage}

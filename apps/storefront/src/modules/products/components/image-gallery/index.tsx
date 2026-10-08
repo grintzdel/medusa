@@ -2,11 +2,25 @@ import { HttpTypes } from "@medusajs/types"
 import { Container } from "@medusajs/ui"
 import Image from "next/image"
 
+import Tin from "@modules/common/components/tin"
+
 type ImageGalleryProps = {
   images: HttpTypes.StoreProductImage[]
+  title: string
+  tone?: unknown
 }
 
-const ImageGallery = ({ images }: ImageGalleryProps) => {
+const ImageGallery = ({ images, title, tone }: ImageGalleryProps) => {
+  if (!images.length) {
+    return (
+      <div className="flex items-start relative">
+        <div className="flex flex-1 small:mx-16 aspect-[29/34] items-center justify-center bg-ecaille-tuile p-[12%]">
+          <Tin label={title} tone={tone} />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex items-start relative">
       <div className="flex flex-col flex-1 small:mx-16 gap-y-4">

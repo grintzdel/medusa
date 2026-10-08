@@ -20,31 +20,31 @@ const Register = ({ setCurrentView }: Props) => {
       className="max-w-sm flex flex-col items-center"
       data-testid="register-page"
     >
-      <h1 className="text-large-semi uppercase mb-6">
-        Become a Medusa Store Member
+      <h1 className="ec-display mb-6 text-center text-[clamp(2.5rem,5vw,3.5rem)] text-ecaille-lien">
+        Créer un compte
       </h1>
-      <p className="text-center text-base-regular text-ui-fg-base mb-4">
-        Create your Medusa Store Member profile, and get access to an enhanced
-        shopping experience.
+      <p className="text-center text-base-regular text-ecaille-brume mb-4">
+        Créez votre compte Écaille pour suivre vos commandes et enregistrer vos
+        adresses.
       </p>
       <form className="w-full flex flex-col" action={formAction}>
         <div className="flex flex-col w-full gap-y-2">
           <Input
-            label="First name"
+            label="Prénom"
             name="first_name"
             required
             autoComplete="given-name"
             data-testid="first-name-input"
           />
           <Input
-            label="Last name"
+            label="Nom"
             name="last_name"
             required
             autoComplete="family-name"
             data-testid="last-name-input"
           />
           <Input
-            label="Email"
+            label="E-mail"
             name="email"
             required
             type="email"
@@ -52,14 +52,14 @@ const Register = ({ setCurrentView }: Props) => {
             data-testid="email-input"
           />
           <Input
-            label="Phone"
+            label="Téléphone"
             name="phone"
             type="tel"
             autoComplete="tel"
             data-testid="phone-input"
           />
           <Input
-            label="Password"
+            label="Mot de passe"
             name="password"
             required
             type="password"
@@ -68,34 +68,35 @@ const Register = ({ setCurrentView }: Props) => {
           />
         </div>
         <ErrorMessage error={message} data-testid="register-error" />
-        <span className="text-center text-ui-fg-base text-small-regular mt-6">
-          By creating an account, you agree to Medusa Store&apos;s{" "}
+        <span className="text-center text-ecaille-brume text-small-regular mt-6">
+          En créant un compte, vous acceptez la{" "}
           <LocalizedClientLink
             href="/content/privacy-policy"
-            className="underline"
+            className="text-ecaille-lien underline"
           >
-            Privacy Policy
+            politique de confidentialité
           </LocalizedClientLink>{" "}
-          and{" "}
+          et les{" "}
           <LocalizedClientLink
             href="/content/terms-of-use"
-            className="underline"
+            className="text-ecaille-lien underline"
           >
-            Terms of Use
-          </LocalizedClientLink>
+            conditions d&apos;utilisation
+          </LocalizedClientLink>{" "}
+          d&apos;Écaille
           .
         </span>
         <SubmitButton className="w-full mt-6" data-testid="register-button">
-          Join
+          Créer mon compte
         </SubmitButton>
       </form>
-      <span className="text-center text-ui-fg-base text-small-regular mt-6">
-        Already a member?{" "}
+      <span className="text-center text-ecaille-brume text-small-regular mt-6">
+        Déjà un compte ?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.SIGN_IN)}
-          className="underline"
+          className="text-ecaille-lien underline"
         >
-          Sign in
+          Se connecter
         </button>
         .
       </span>

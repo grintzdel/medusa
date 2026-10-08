@@ -21,6 +21,21 @@ module.exports = {
         padding: "padding-top padding-right padding-bottom padding-left",
       },
       colors: {
+        ecaille: {
+          outremer: "rgb(var(--ec-outremer) / <alpha-value>)",
+          lien: "rgb(var(--ec-lien) / <alpha-value>)",
+          nuit: "rgb(var(--ec-nuit) / <alpha-value>)",
+          surface: "rgb(var(--ec-surface) / <alpha-value>)",
+          citron: "rgb(var(--ec-citron) / <alpha-value>)",
+          encre: "rgb(var(--ec-encre) / <alpha-value>)",
+          sel: "rgb(var(--ec-sel) / <alpha-value>)",
+          tuile: "rgb(var(--ec-tuile) / <alpha-value>)",
+          ligne: "rgb(var(--ec-ligne) / <alpha-value>)",
+          brume: "rgb(var(--ec-brume) / <alpha-value>)",
+          piment: "rgb(var(--ec-piment) / <alpha-value>)",
+          algue: "rgb(var(--ec-algue) / <alpha-value>)",
+          sardine: "rgb(var(--ec-sardine) / <alpha-value>)",
+        },
         grey: {
           0: "#FFFFFF",
           5: "#F9FAFB",
@@ -42,6 +57,8 @@ module.exports = {
         rounded: "8px",
         large: "16px",
         circle: "9999px",
+        tin: "18px",
+        ctl: "6px",
       },
       maxWidth: {
         "8xl": "100rem",
@@ -59,8 +76,10 @@ module.exports = {
         "3xl": "2rem",
       },
       fontFamily: {
+        display: ["var(--font-archivo)", "Arial Narrow", "Helvetica Neue", "sans-serif"],
+        mono: ["var(--font-plex-mono)", "ui-monospace", "SF Mono", "Menlo", "monospace"],
         sans: [
-          "Inter",
+          "var(--font-instrument)",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
