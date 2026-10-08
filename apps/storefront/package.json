@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "analyze": "ANALYZE=true next build",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -36,6 +37,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@medusajs/types": "2.21.2",
     "@medusajs/ui-preset": "2.21.2",
+    "@playwright/test": "^1.64.0",
     "@types/lodash": "^4.14.195",
     "@types/node": "^22.18.0",
     "@types/react": "19.0.5",

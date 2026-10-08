@@ -81,7 +81,10 @@ cd apps/backend && <pm> run test:unit                      # **/src/**/__tests__
 cd apps/backend && <pm> run test:integration:modules       # **/src/modules/*/__tests__/**
 cd apps/backend && <pm> run test:integration:http          # **/integration-tests/http/*.spec.ts
 cd apps/storefront && <pm> run test                        # Vitest, **/*.test.ts
+<pm> run test:e2e                                          # Playwright, apps/storefront/e2e/*.e2e.ts, on a throwaway DB
 ```
+
+`test:e2e` from the root (`scripts/e2e.sh`) recreates a `medusa_e2e` database, so it is safe to run. `cd apps/storefront && <pm> run test:e2e` instead targets the running dev storefront and writes orders and customers into the dev database.
 
 Backend unit tests live under `src/__tests__/`, not next to the code: Medusa loads every file under `src/search/` as an index, test files included.
 
