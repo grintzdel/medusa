@@ -7,10 +7,8 @@ import { useState } from "react"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CountrySelect from "../country-select"
-import LanguageSelect from "../language-select"
 import { NavLink, useIsActiveLink } from "../nav-links"
 import { HttpTypes } from "@medusajs/types"
-import { Locale } from "@lib/data/locales"
 
 const secondaryLinks: NavLink[] = [
   { label: "Mon compte", href: "/account" },
@@ -20,14 +18,11 @@ const secondaryLinks: NavLink[] = [
 type SideMenuProps = {
   links: NavLink[]
   regions: HttpTypes.StoreRegion[] | null
-  locales: Locale[] | null
-  currentLocale: string | null
 }
 
-const SideMenu = ({ links, regions, locales, currentLocale }: SideMenuProps) => {
+const SideMenu = ({ links, regions }: SideMenuProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const countryToggleState = useToggleState()
-  const languageToggleState = useToggleState()
   const isActive = useIsActiveLink()
 
   const close = () => setIsOpen(false)
@@ -108,25 +103,6 @@ const SideMenu = ({ links, regions, locales, currentLocale }: SideMenuProps) => 
           </div>
 
           <div className="flex flex-col gap-y-4 border-t border-white/10 px-6 py-5 text-sm">
-            {!!locales?.length && (
-              <div
-                className="flex justify-between"
-                onMouseEnter={languageToggleState.open}
-                onMouseLeave={languageToggleState.close}
-              >
-                <LanguageSelect
-                  toggleState={languageToggleState}
-                  locales={locales}
-                  currentLocale={currentLocale}
-                />
-                <ArrowRightMini
-                  className={clx(
-                    "transition-transform duration-150",
-                    languageToggleState.state ? "-rotate-90" : ""
-                  )}
-                />
-              </div>
-            )}
             <div
               className="flex justify-between"
               onMouseEnter={countryToggleState.open}

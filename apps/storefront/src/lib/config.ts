@@ -1,5 +1,4 @@
 import { clientIpFrom } from "@lib/util/client-ip"
-import { getLocaleHeader } from "@lib/util/get-locale-header"
 import { headers as nextHeaders } from "next/headers"
 import Medusa, { FetchArgs, FetchInput } from "@medusajs/js-sdk"
 
@@ -23,12 +22,6 @@ sdk.client.fetch = async <T>(
   init?: FetchArgs
 ): Promise<T> => {
   const headers = init?.headers ?? {}
-  let localeHeader: Record<string, string | null> | undefined
-  try {
-    localeHeader = await getLocaleHeader()
-    headers["x-medusa-locale"] ??= localeHeader["x-medusa-locale"]
-  } catch {}
-
   // The backend rate-limits /auth per client IP, and these calls come from
   // the storefront server, so forward the visitor's address.
   if (typeof input === "string" && input.startsWith("/auth/")) {
@@ -40,13 +33,9 @@ sdk.client.fetch = async <T>(
     } catch {}
   }
 
-  const newHeaders = {
-    ...localeHeader,
-    ...headers,
-  }
   init = {
     ...init,
-    headers: newHeaders,
+    headers,
   }
   return originalFetch(input, init)
 }

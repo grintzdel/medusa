@@ -2,8 +2,6 @@ import { Suspense } from "react"
 
 import { listCategories } from "@lib/data/categories"
 import { listRegions } from "@lib/data/regions"
-import { listLocales } from "@lib/data/locales"
-import { getLocale } from "@lib/data/locale-actions"
 import { StoreRegion } from "@medusajs/types"
 import { ShoppingBag, User } from "@medusajs/icons"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
@@ -17,10 +15,8 @@ const iconButtonClassName =
   "flex h-10 w-10 items-center justify-center rounded-ctl text-ecaille-encre transition-colors hover:bg-ecaille-tuile focus-visible:outline focus-visible:outline-2 focus-visible:outline-ecaille-lien"
 
 export default async function Nav() {
-  const [regions, locales, currentLocale, categories] = await Promise.all([
+  const [regions, categories] = await Promise.all([
     listRegions().then((regions: StoreRegion[]) => regions),
-    listLocales(),
-    getLocale(),
     listCategories().catch((error) => {
       console.error("Nav: failed to load categories", error)
       return []
@@ -55,8 +51,6 @@ export default async function Nav() {
           <SideMenu
             links={links}
             regions={regions}
-            locales={locales}
-            currentLocale={currentLocale}
           />
         </div>
 
