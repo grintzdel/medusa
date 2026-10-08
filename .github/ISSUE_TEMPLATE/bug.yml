@@ -1,0 +1,39 @@
+name: Bug
+description: Un comportement incorrect de la boutique, de l'admin ou de l'outillage
+labels: [bug]
+body:
+  - type: textarea
+    id: constat
+    attributes:
+      label: Constat
+      description: Ce qui se passe, avec le message d'erreur exact s'il y en a un.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      placeholder: |
+        1. Aller sur /fr/products/...
+        2. Cliquer sur...
+        3. Voir...
+    validations:
+      required: true
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Comportement attendu
+    validations:
+      required: true
+  - type: dropdown
+    id: zone
+    attributes:
+      label: Zone
+      options: [Storefront, Backend / API, Admin, CI / outillage]
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: Qui est touché, et à quel point (clients bloqués, données fausses, gêne visuelle…).
