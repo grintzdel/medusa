@@ -1,147 +1,154 @@
 "use client"
 
-import { Popover, PopoverPanel, Transition } from "@headlessui/react"
-import { ArrowRightMini, XMark } from "@medusajs/icons"
-import { Text, clx, useToggleState } from "@medusajs/ui"
-import { Fragment } from "react"
+import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react"
+import { ArrowRightMini, BarsThree, XMark } from "@medusajs/icons"
+import { clx, useToggleState } from "@medusajs/ui"
+import { useState } from "react"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CountrySelect from "../country-select"
 import LanguageSelect from "../language-select"
+import { NavLink, useIsActiveLink } from "../nav-links"
 import { HttpTypes } from "@medusajs/types"
 import { Locale } from "@lib/data/locales"
 
-const SideMenuItems = {
-  home: { label: "Accueil", href: "/" },
-  store: { label: "Conserves", href: "/store" },
-  account: { label: "Mon compte", href: "/account" },
-  cart: { label: "Panier", href: "/cart" },
-}
+const secondaryLinks: NavLink[] = [
+  { label: "Mon compte", href: "/account" },
+  { label: "Panier", href: "/cart" },
+]
 
 type SideMenuProps = {
+  links: NavLink[]
   regions: HttpTypes.StoreRegion[] | null
   locales: Locale[] | null
   currentLocale: string | null
 }
 
-const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
+const SideMenu = ({ links, regions, locales, currentLocale }: SideMenuProps) => {
+  const [isOpen, setIsOpen] = useState(false)
   const countryToggleState = useToggleState()
   const languageToggleState = useToggleState()
+  const isActive = useIsActiveLink()
+
+  const close = () => setIsOpen(false)
 
   return (
-    <div className="h-full">
-      <div className="flex items-center h-full">
-        <Popover className="h-full flex">
-          {({ open, close }) => (
-            <>
-              <div className="relative flex h-full">
-                <Popover.Button
-                  data-testid="nav-menu-button"
-                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base"
-                >
-                  Menu
-                </Popover.Button>
-              </div>
+    <>
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="-ml-2 flex h-10 w-10 items-center justify-center rounded-ctl hover:bg-ecaille-tuile focus-visible:outline focus-visible:outline-2 focus-visible:outline-ecaille-lien"
+        aria-label="Ouvrir le menu"
+        data-testid="nav-menu-button"
+      >
+        <BarsThree />
+      </button>
 
-              {open && (
-                <div
-                  className="fixed inset-0 z-[50] bg-transparent pointer-events-auto"
-                  onClick={close}
-                  data-testid="side-menu-backdrop"
-                />
-              )}
+      <Dialog open={isOpen} onClose={close} className="relative z-[60]">
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-ecaille-nuit/50 backdrop-blur-sm transition-opacity duration-300 ease-out data-[closed]:opacity-0"
+          data-testid="side-menu-backdrop"
+        />
+        <DialogPanel
+          transition
+          className="fixed inset-y-0 left-0 flex w-[min(88vw,380px)] flex-col bg-ecaille-outremer text-white shadow-2xl transition-transform duration-300 ease-out data-[closed]:-translate-x-full"
+          data-testid="nav-menu-popup"
+        >
+          <div className="flex h-16 items-center justify-between px-6">
+            <span className="ec-display text-[30px] leading-none text-ecaille-citron">
+              Écaille
+            </span>
+            <button
+              type="button"
+              onClick={close}
+              className="-mr-2 flex h-10 w-10 items-center justify-center rounded-ctl hover:bg-white/10"
+              aria-label="Fermer le menu"
+              data-testid="close-menu-button"
+            >
+              <XMark />
+            </button>
+          </div>
 
-              <Transition
-                show={open}
-                as={Fragment}
-                enter="transition ease-out duration-150"
-                enterFrom="opacity-0"
-                enterTo="opacity-100 backdrop-blur-2xl"
-                leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 backdrop-blur-2xl"
-                leaveTo="opacity-0"
-              >
-                <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-[51] inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
-                  <div
-                    data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-ecaille-outremer justify-between p-6"
+          <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4">
+            <span className="ec-eyebrow text-white/60">Conserves</span>
+            <ul className="mt-3 flex flex-col">
+              {links.map(({ label, href }) => (
+                <li key={href} className="border-b border-white/10">
+                  <LocalizedClientLink
+                    href={href}
+                    onClick={close}
+                    aria-current={isActive(href) ? "page" : undefined}
+                    className={clx(
+                      "group flex items-center justify-between ec-heading py-3 text-3xl transition-colors hover:text-ecaille-citron",
+                      isActive(href) && "text-ecaille-citron"
+                    )}
                   >
-                    <div className="flex justify-end" id="xmark">
-                      <button
-                        data-testid="close-menu-button"
-                        onClick={close}
-                        aria-label="Fermer le menu"
-                      >
-                        <XMark />
-                      </button>
-                    </div>
-                    <ul className="flex flex-col gap-6 items-start justify-start">
-                      {Object.entries(SideMenuItems).map(([key, { label, href }]) => {
-                        return (
-                          <li key={key}>
-                            <LocalizedClientLink
-                              href={href}
-                              className="ec-display text-5xl hover:text-ecaille-citron"
-                              onClick={close}
-                              data-testid={`${key}-link`}
-                            >
-                              {label}
-                            </LocalizedClientLink>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                    <div className="flex flex-col gap-y-6">
-                      {!!locales?.length && (
-                        <div
-                          className="flex justify-between"
-                          onMouseEnter={languageToggleState.open}
-                          onMouseLeave={languageToggleState.close}
-                        >
-                          <LanguageSelect
-                            toggleState={languageToggleState}
-                            locales={locales}
-                            currentLocale={currentLocale}
-                          />
-                          <ArrowRightMini
-                            className={clx(
-                              "transition-transform duration-150",
-                              languageToggleState.state ? "-rotate-90" : ""
-                            )}
-                          />
-                        </div>
-                      )}
-                      <div
-                        className="flex justify-between"
-                        onMouseEnter={countryToggleState.open}
-                        onMouseLeave={countryToggleState.close}
-                      >
-                        {regions && (
-                          <CountrySelect
-                            toggleState={countryToggleState}
-                            regions={regions}
-                          />
-                        )}
-                        <ArrowRightMini
-                          className={clx(
-                            "transition-transform duration-150",
-                            countryToggleState.state ? "-rotate-90" : ""
-                          )}
-                        />
-                      </div>
-                      <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Écaille, conserverie
-                        atlantique.
-                      </Text>
-                    </div>
-                  </div>
-                </PopoverPanel>
-              </Transition>
-            </>
-          )}
-        </Popover>
-      </div>
-    </div>
+                    {label}
+                    <ArrowRightMini className="opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+                  </LocalizedClientLink>
+                </li>
+              ))}
+            </ul>
+
+            <ul className="mt-8 flex flex-col gap-3">
+              {secondaryLinks.map(({ label, href }) => (
+                <li key={href}>
+                  <LocalizedClientLink
+                    href={href}
+                    onClick={close}
+                    className="text-base font-medium text-white/80 hover:text-white"
+                    data-testid={href === "/account" ? "account-link" : "cart-link"}
+                  >
+                    {label}
+                  </LocalizedClientLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="flex flex-col gap-y-4 border-t border-white/10 px-6 py-5 text-sm">
+            {!!locales?.length && (
+              <div
+                className="flex justify-between"
+                onMouseEnter={languageToggleState.open}
+                onMouseLeave={languageToggleState.close}
+              >
+                <LanguageSelect
+                  toggleState={languageToggleState}
+                  locales={locales}
+                  currentLocale={currentLocale}
+                />
+                <ArrowRightMini
+                  className={clx(
+                    "transition-transform duration-150",
+                    languageToggleState.state ? "-rotate-90" : ""
+                  )}
+                />
+              </div>
+            )}
+            <div
+              className="flex justify-between"
+              onMouseEnter={countryToggleState.open}
+              onMouseLeave={countryToggleState.close}
+            >
+              {regions && (
+                <CountrySelect toggleState={countryToggleState} regions={regions} />
+              )}
+              <ArrowRightMini
+                className={clx(
+                  "transition-transform duration-150",
+                  countryToggleState.state ? "-rotate-90" : ""
+                )}
+              />
+            </div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-white/50">
+              © {new Date().getFullYear()} Écaille, conserverie atlantique
+            </p>
+          </div>
+        </DialogPanel>
+      </Dialog>
+    </>
   )
 }
 
