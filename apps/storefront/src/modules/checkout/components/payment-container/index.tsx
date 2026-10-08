@@ -12,6 +12,11 @@ import { StripeCardElementOptions } from "@stripe/stripe-js"
 import PaymentTest from "../payment-test"
 import { StripeContext } from "../payment-wrapper/stripe-wrapper"
 
+const FALLBACK_COLORS = {
+  light: { encre: "rgb(16 26 58)", brume: "rgb(86 96 126)" },
+  dark: { encre: "rgb(231 236 246)", brume: "rgb(152 163 194)" },
+}
+
 const themeColor = (token: string, fallback: string) => {
   if (typeof window === "undefined") {
     return fallback
@@ -93,14 +98,16 @@ export const StripeCardContainer = ({
   const isDark = useIsDarkTheme()
 
   const useOptions: StripeCardElementOptions = useMemo(() => {
+    const fallback = FALLBACK_COLORS[isDark ? "dark" : "light"]
+
     return {
       style: {
         base: {
           fontFamily: "system-ui, -apple-system, Segoe UI, sans-serif",
-          color: themeColor("--ec-encre", "rgb(16 26 58)"),
-          iconColor: themeColor("--ec-brume", "rgb(86 96 126)"),
+          color: themeColor("--ec-encre", fallback.encre),
+          iconColor: themeColor("--ec-brume", fallback.brume),
           "::placeholder": {
-            color: themeColor("--ec-brume", "rgb(86 96 126)"),
+            color: themeColor("--ec-brume", fallback.brume),
           },
         },
       },

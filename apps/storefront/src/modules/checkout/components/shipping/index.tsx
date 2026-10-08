@@ -18,7 +18,9 @@ const PICKUP_OPTION_OFF = "__PICKUP_OFF"
 
 type ShippingProps = {
   cart: HttpTypes.StoreCart
-  availableShippingMethods: HttpTypes.StoreCartShippingOptionWithServiceZone[] | null
+  availableShippingMethods:
+    | HttpTypes.StoreCartShippingOptionWithServiceZone[]
+    | null
 }
 
 type FormattableAddress = {
@@ -91,28 +93,40 @@ const Shipping: React.FC<ShippingProps> = ({
   useEffect(() => {
     setIsLoadingPrices(true)
 
-    if (_shippingMethods?.length) {
-      const promises = _shippingMethods
-        .filter((sm) => sm.price_type === "calculated")
-        .map((sm) => calculatePriceForShippingOption(sm.id, cart.id))
+    const calculatedMethods = availableShippingMethods?.filter(
+      (sm) =>
+        sm.service_zone?.fulfillment_set?.type !== "pickup" &&
+        sm.price_type === "calculated"
+    )
 
-      if (promises.length) {
-        Promise.allSettled(promises).then((res) => {
-          const pricesMap: Record<string, number> = {}
-          res
-            .filter((r) => r.status === "fulfilled")
-            .forEach((p) => (pricesMap[p.value?.id || ""] = p.value?.amount!))
+    if (calculatedMethods?.length) {
+      Promise.allSettled(
+        calculatedMethods.map((sm) =>
+          calculatePriceForShippingOption(sm.id, cart.id)
+        )
+      ).then((res) => {
+        const pricesMap: Record<string, number> = {}
+        res
+          .filter((r) => r.status === "fulfilled")
+          .forEach((p) => (pricesMap[p.value?.id || ""] = p.value?.amount!))
 
-          setCalculatedPricesMap(pricesMap)
-          setIsLoadingPrices(false)
-        })
-      }
+        setCalculatedPricesMap(pricesMap)
+        setIsLoadingPrices(false)
+      })
     }
+  }, [availableShippingMethods, cart.id])
 
-    if (_pickupMethods?.find((m) => m.id === shippingMethodId)) {
+  useEffect(() => {
+    const isPickupSelected = availableShippingMethods?.some(
+      (sm) =>
+        sm.id === shippingMethodId &&
+        sm.service_zone?.fulfillment_set?.type === "pickup"
+    )
+
+    if (isPickupSelected) {
       setShowPickupOptions(PICKUP_OPTION_ON)
     }
-  }, [availableShippingMethods])
+  }, [availableShippingMethods, shippingMethodId])
 
   const handleEdit = () => {
     router.push(pathname + "?step=delivery", { scroll: false })
