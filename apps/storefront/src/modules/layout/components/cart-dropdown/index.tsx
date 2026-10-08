@@ -8,7 +8,8 @@ import {
 } from "@headlessui/react"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
-import { Button } from "@medusajs/ui"
+import { ShoppingBag } from "@medusajs/icons"
+import { Button, clx } from "@medusajs/ui"
 import DeleteButton from "@modules/common/components/delete-button"
 import LineItemOptions from "@modules/common/components/line-item-options"
 import LineItemPrice from "@modules/common/components/line-item-price"
@@ -80,14 +81,20 @@ const CartDropdown = ({
       onMouseLeave={close}
     >
       <Popover className="relative h-full">
-        <PopoverButton className="h-full">
+        <PopoverButton className="flex h-full items-center">
           <LocalizedClientLink
-            className="flex items-center gap-2 font-semibold hover:text-ecaille-lien"
+            className="relative flex h-10 w-10 items-center justify-center rounded-ctl text-ecaille-encre transition-colors hover:bg-ecaille-tuile focus-visible:outline focus-visible:outline-2 focus-visible:outline-ecaille-lien"
             href="/cart"
+            aria-label={`Panier, ${totalItems} article${totalItems > 1 ? "s" : ""}`}
             data-testid="nav-cart-link"
           >
-            Panier
-            <span className="grid h-[22px] min-w-[22px] place-items-center rounded-full bg-ecaille-outremer px-1.5 text-xs text-white tabular-nums">
+            <ShoppingBag />
+            <span
+              className={clx(
+                "absolute right-0.5 top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ecaille-citron px-1 font-mono text-[10px] font-semibold text-ecaille-nuit tabular-nums ring-2 ring-ecaille-surface transition-transform duration-200",
+                totalItems ? "scale-100" : "scale-0"
+              )}
+            >
               {totalItems}
             </span>
           </LocalizedClientLink>
@@ -104,15 +111,18 @@ const CartDropdown = ({
         >
           <PopoverPanel
             static
-            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-ui-bg-base border-x border-b border-ui-border-base w-[420px] text-ui-fg-base"
+            className="hidden small:block absolute top-[calc(100%+8px)] right-0 w-[420px] overflow-hidden rounded-ctl border border-ecaille-ligne bg-ecaille-surface text-ui-fg-base shadow-[0_24px_48px_-16px_rgba(16,26,58,0.35)]"
             data-testid="nav-cart-dropdown"
           >
-            <div className="p-4 flex items-center justify-center">
+            <div className="flex items-baseline justify-between border-b border-ecaille-ligne p-4">
               <h3 className="ec-heading text-2xl">Panier</h3>
+              <span className="ec-eyebrow">
+                {totalItems} article{totalItems > 1 ? "s" : ""}
+              </span>
             </div>
             {cartState && cartState.items?.length ? (
               <>
-                <div className="overflow-y-scroll max-h-[402px] px-4 grid grid-cols-1 gap-y-8 no-scrollbar p-px">
+                <div className="overflow-y-scroll max-h-[402px] px-4 grid grid-cols-1 gap-y-6 no-scrollbar py-4">
                   {cartState.items
                     .sort((a, b) => {
                       return (a.created_at ?? "") > (b.created_at ?? "")
@@ -181,7 +191,7 @@ const CartDropdown = ({
                       </div>
                     ))}
                 </div>
-                <div className="p-4 flex flex-col gap-y-4 text-small-regular">
+                <div className="flex flex-col gap-y-4 border-t border-ecaille-ligne bg-ecaille-sel p-4 text-small-regular">
                   <div className="flex items-center justify-between">
                     <span className="text-ui-fg-base font-semibold">
                       Sous-total{" "}
