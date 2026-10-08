@@ -11,11 +11,18 @@ test("quantity changes update the line and removing the last item empties the ca
   const subtotal = page.getByTestId("cart-subtotal")
   const unitPrice = Number(await subtotal.getAttribute("data-value"))
 
-  await row.getByTestId("product-select-button").selectOption("3")
-  await expect.poll(async () => Number(await subtotal.getAttribute("data-value"))).toBeCloseTo(unitPrice * 3)
+  // The row is a client component: an interaction before hydration is silently dropped, so retry until it lands.
+  await expect(async () => {
+    await row.getByTestId("product-select-button").selectOption("3")
+    await expect
+      .poll(async () => Number(await subtotal.getAttribute("data-value")), { timeout: 3_000 })
+      .toBeCloseTo(unitPrice * 3)
+  }).toPass()
 
-  await row.getByTestId("product-delete-button").click()
-  await expect(page.getByTestId("empty-cart-message")).toBeVisible()
+  await expect(async () => {
+    await row.getByTestId("product-delete-button").click()
+    await expect(page.getByTestId("empty-cart-message")).toBeVisible({ timeout: 3_000 })
+  }).toPass()
 })
 
 test("items from two products sit on separate lines", async ({ page }) => {
