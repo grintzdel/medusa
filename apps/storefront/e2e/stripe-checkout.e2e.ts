@@ -1,7 +1,10 @@
 import { expect, test } from "@playwright/test"
 import { addToCart, uniqueEmail } from "./support/cart"
 
-test.skip(!process.env.NEXT_PUBLIC_STRIPE_KEY, "needs a Stripe test key")
+test.skip(
+  !process.env.NEXT_PUBLIC_STRIPE_KEY || !process.env.STRIPE_API_KEY,
+  "needs Stripe test keys in NEXT_PUBLIC_STRIPE_KEY and STRIPE_API_KEY"
+)
 
 test("a guest pays by card with Stripe and lands on the order confirmation", async ({ page }) => {
   await addToCart(page, "maquereau-moutarde-ancienne")
