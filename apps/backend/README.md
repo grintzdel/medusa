@@ -6,4 +6,6 @@ Installation, variables d’environnement et mise en production : voir le [READM
 
 - `src/scripts/seed-ecaille-products.ts` : catalogue Écaille (`pnpm run seed`, idempotent).
 - `src/scripts/remove-medusa-demo-products.ts` : supprime les produits de démo Medusa.
+- `src/scripts/seed-demo-products.ts` : outil de dev, crée 50 produits `demo-*` pour tester la pagination et les filtres du catalogue. À ne pas lancer sur une base de prod (#46).
+- `src/search/` : index de recherche produit (`/store/search`). Medusa charge tout ce dossier : aucun test ici, ils vont dans `src/__tests__/`.
 - `src/api/middlewares.ts` : limitation de débit sur `/auth` et configuration de la recherche produit.

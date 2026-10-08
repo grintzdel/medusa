@@ -90,6 +90,7 @@ Le serveur refuse de démarrer en `NODE_ENV=production` s'il manque une variable
 | `NEXT_PUBLIC_BASE_URL` | URL publique de la boutique |
 | `NEXT_PUBLIC_DEFAULT_REGION` | Pays par défaut (ISO-2 minuscule) quand la géolocalisation échoue |
 | `NEXT_PUBLIC_STRIPE_KEY` | Clé publique Stripe |
+| `NEXT_PUBLIC_MEDUSA_PAYMENTS_PUBLISHABLE_KEY`, `NEXT_PUBLIC_MEDUSA_PAYMENTS_ACCOUNT_ID` | Medusa Payments (Medusa Cloud) à la place d'un compte Stripe propre ; inutilisées sinon |
 | `MEDUSA_CLOUD_S3_HOSTNAME`, `MEDUSA_CLOUD_S3_PATHNAME` | Domaine d'images supplémentaire autorisé |
 
 ## Mise en production
@@ -104,3 +105,13 @@ Le serveur refuse de démarrer en `NODE_ENV=production` s'il manque une variable
 ## Sécurité
 
 Voir [SECURITY.md](./SECURITY.md) pour signaler une faille et pour la liste des protections en place.
+
+## Documentation
+
+| Document | Contenu |
+|---|---|
+| [CONTRIBUTING.md](./CONTRIBUTING.md) | Issues, branches, commits, PR, relecture, définition de « terminé » |
+| [docs/adr/](./docs/adr/README.md) | Décisions d'architecture et leurs compromis |
+| [docs/dossier/](./docs/dossier/) | Dossier technique en PDF : direction artistique, stack, architecture, modèle de données |
+| [SECURITY.md](./SECURITY.md) | Signalement de faille, protections en place, limites connues |
+| [AGENTS.md](./AGENTS.md) | Commandes et conventions, pour les agents de code comme pour les humains |
