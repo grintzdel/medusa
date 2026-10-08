@@ -12,14 +12,14 @@ const OnboardingCta = ({ orderId }: { orderId: string }) => {
         </Text>
         <Text className="text-ui-fg-subtle text-small-regular">
           Vous pouvez maintenant finaliser la configuration de votre boutique
-          dans l'admin.
+          dans l’admin.
         </Text>
         <Button
           className="w-fit rounded-ctl"
           size="xlarge"
           onClick={() => resetOnboardingState(orderId)}
         >
-          Finaliser la configuration dans l'admin
+          Finaliser la configuration dans l’admin
         </Button>
       </div>
     </Container>

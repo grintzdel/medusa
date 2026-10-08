@@ -120,7 +120,7 @@ const AccountNav = ({
                   route={route!}
                   data-testid="overview-link"
                 >
-                  Vue d'ensemble
+                  Vue d’ensemble
                 </AccountNavLink>
               </li>
               <li>
