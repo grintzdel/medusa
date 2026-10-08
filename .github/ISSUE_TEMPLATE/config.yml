@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Signaler une faille de sécurité
+    url: https://github.com/grintzdel/medusa/blob/main/SECURITY.md
+    about: Ne pas ouvrir d'issue pour une faille. Suivre la procédure de SECURITY.md.

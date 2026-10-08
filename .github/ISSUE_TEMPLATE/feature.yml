@@ -1,0 +1,30 @@
+name: Fonctionnalité ou amélioration
+description: Un besoin nouveau, une amélioration ou de la dette à résorber
+body:
+  - type: textarea
+    id: contexte
+    attributes:
+      label: Contexte
+      description: Le problème à résoudre, pour qui, et pourquoi maintenant.
+    validations:
+      required: true
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Attendu
+      description: Ce qui doit exister à la fin. Pas encore la solution technique.
+    validations:
+      required: true
+  - type: textarea
+    id: criteres
+    attributes:
+      label: Critères d'acceptation
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: hors-perimetre
+    attributes:
+      label: Hors périmètre

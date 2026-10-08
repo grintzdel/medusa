@@ -2,7 +2,9 @@
 
 ## Signaler une faille
 
-Ne pas ouvrir d'issue publique. Utiliser *Security → Report a vulnerability* sur le dépôt GitHub (signalement privé), avec les étapes de reproduction et l’impact estimé.
+Ne pas ouvrir d'issue. Contacter directement le mainteneur, [@grintzdel](https://github.com/grintzdel), avec les étapes de reproduction et l’impact estimé.
+
+Le signalement privé intégré à GitHub (*Security → Report a vulnerability*) n'existe que sur les dépôts publics : il deviendra le canal officiel si le dépôt est rendu public.
 
 ## Protections en place
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Medusa DTC Starter — a Turborepo workspace monorepo containing a Medusa backend (`@medusajs/medusa` 2.21, Node 22.22+, PostgreSQL 15+, Redis) and a Next.js 15 storefront for the Écaille brand (French copy, dark mode). Local Postgres and Redis come from `docker-compose.yml`.
+Medusa DTC Starter — a Turborepo workspace monorepo containing a Medusa backend (`@medusajs/medusa` 2.21, Node 22.22+, PostgreSQL 17, Redis 7) and a Next.js 15 storefront for the Écaille brand (French copy, dark mode). Local Postgres and Redis come from `docker-compose.yml`.
 
 ## Directory Structure
 
@@ -19,15 +19,18 @@ Medusa DTC Starter — a Turborepo workspace monorepo containing a Medusa backen
 │   │       ├── links/            # Module links between modules
 │   │       ├── migration-scripts/# Data migration scripts (e.g. initial-data-seed.ts)
 │   │       ├── modules/          # Custom modules (service + models + migrations)
+│   │       ├── scripts/          # medusa exec scripts: Écaille seed, demo cleanup, dev-only demo seed
+│   │       ├── search/           # Product search index for /store/search (loaded whole by Medusa: no tests here)
+│   │       ├── __tests__/        # Backend unit tests
 │   │       ├── subscribers/      # Event subscribers
 │   │       └── workflows/        # Workflows and workflow steps
-│   └── storefront/               # OPTIONAL storefront
+│   └── storefront/               # Next.js 15 storefront (@dtc/storefront), Playwright suite in e2e/
+├── docs/adr/                     # Architecture decision records
+├── scripts/e2e.sh                # E2E run on a throwaway database
 ├── eslint.config.ts              # Root ESLint: @medusajs/eslint-plugin recommended
 ├── turbo.json                    # Task graph: build, dev, start, lint, typecheck, test, seed
 ├── .github/workflows/ci.yml      # Lint, typecheck, tests and pnpm audit on every PR
 ```
-
-**`apps/storefront` is optional and may not exist.** It is skipped when the user chooses not to install it. Before running any storefront command, referencing storefront files, or assuming a full-stack change is possible, check that `apps/storefront/` exists. If it doesn't, the project is backend-only — do not scaffold it or suggest it was deleted by mistake.
 
 Each app can have its own nested `AGENTS.md`; agents read the nearest one in the directory tree, so put app-specific context there rather than expanding this file.
 
@@ -132,7 +135,7 @@ claude mcp add --transport http medusa https://docs.medusajs.com/mcp # or agent 
 ## Code Style
 
 - **The backend must satisfy `@medusajs/eslint-plugin`'s recommended config** (`eslint.config.ts`). Its rules encode Medusa framework requirements — correct route/workflow/module shapes, not just cosmetics — so a lint failure usually means the code is actually wrong, not just badly formatted. Never disable a `@medusajs/*` rule to make lint pass; fix the code.
-- No semicolons. Double quotes, 2-space indent.
+- No semicolons, 2-space indent. The storefront is formatted by Prettier (`apps/storefront/.prettierrc`, double quotes). The backend has no shared formatter yet and mixes quote styles (issue #44): match the file you edit.
 - Files: kebab-case. Types/classes: PascalCase. Functions/variables: camelCase. DB columns: snake_case.
 - No emojis in code, comments, or commit messages.
 
@@ -144,7 +147,6 @@ claude mcp add --transport http medusa https://docs.medusajs.com/mcp # or agent 
 
 ## Common Mistakes
 
-- Running storefront commands without checking that `apps/storefront/` exists.
 - Assuming a package manager instead of detecting it, or running a command that creates a second lockfile.
 - Installing a dependency at the root instead of inside the app that needs it (`cd apps/backend && <pm> add <pkg>`).
 - Editing a custom module's model without running `<pm> exec medusa db:generate <module>` — the migration is missing and the change silently never applies.
