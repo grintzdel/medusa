@@ -31,4 +31,4 @@ En `NODE_ENV=production`, le serveur **refuse de démarrer** si `REDIS_URL`, les
 - La même image tourne partout : seules les variables changent.
 - Une erreur de configuration en prod se voit au déploiement, pas au premier client.
 - Le backend peut tourner sur plusieurs instances, et les compteurs de limitation de débit sont partagés (ADR 0004).
-- Activer Stripe ne suffit pas : il faut aussi l'activer sur chaque région dans l'admin. Une fois #18 fusionnée, le seed le fera sur une base neuve.
+- Activer Stripe ne suffit pas : il faut aussi l'activer sur la région. Sur une base neuve, la migration initiale (`initial-data-seed.ts`) le fait si `STRIPE_API_KEY` est défini ; sur une base existante, il faut passer par l'admin.

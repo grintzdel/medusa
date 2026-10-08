@@ -63,6 +63,12 @@ La CI (`.github/workflows/ci.yml`) lance lint, typecheck, tests unitaires et E2E
 
 `pnpm test:e2e` (script `scripts/e2e.sh`) ne touche jamais la base de dev. Il recrée une base `medusa_e2e` sur le Postgres du compose et utilise la base Redis n° 1. Il migre, démarre un backend de prod sur `:9001`, charge le catalogue, builde le storefront sur `:8001`, puis lance Playwright. Les arguments sont transmis à Playwright (`pnpm test:e2e --repeat-each=3`). Les logs des serveurs sont écrits dans `apps/storefront/.e2e-logs/`.
 
+Le test de paiement par carte (`stripe-checkout.e2e.ts`) est ignoré sans clés Stripe de test, donc en CI. Pour le lancer, exporter les clés dans le shell : le backend E2E tourne en mode production et exige aussi un secret de webhook, quelconque ici.
+
+```bash
+STRIPE_API_KEY=sk_test_... STRIPE_WEBHOOK_SECRET=whsec_e2e NEXT_PUBLIC_STRIPE_KEY=pk_test_... pnpm test:e2e
+```
+
 Pour itérer sur un test contre le storefront de dev déjà lancé : `cd apps/storefront && pnpm test:e2e`. Attention, ce mode écrit dans la base de dev.
 
 ## Variables d'environnement
@@ -99,7 +105,7 @@ Le serveur refuse de démarrer en `NODE_ENV=production` s'il manque une variable
 2. Secrets forts : `openssl rand -base64 48` pour `JWT_SECRET` et `COOKIE_SECRET`.
 3. CORS limités aux domaines réels, sans `localhost`.
 4. Le backend doit être derrière **exactement un** reverse proxy qui renseigne `X-Forwarded-For`. Medusa fait confiance à un saut de proxy pour déterminer l'IP client, sur laquelle repose la limitation des tentatives de connexion.
-5. Stripe : activer le provider sur chaque région dans l'admin, puis déclarer le webhook `https://<backend>/hooks/payment/stripe_stripe`.
+5. Stripe : sur une base neuve, la migration initiale active Stripe sur la région Europe si `STRIPE_API_KEY` est défini. Sur une base existante, l'activer dans l'admin (*Réglages → Régions → Fournisseurs de paiement*). Puis déclarer le webhook `https://<backend>/hooks/payment/stripe_stripe`.
 6. `pnpm exec medusa db:migrate` à chaque déploiement, avant de démarrer le serveur.
 
 ## Sécurité
