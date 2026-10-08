@@ -2,7 +2,7 @@
 
 ## Overview
 
-Medusa DTC Starter — a Turborepo workspace monorepo containing a Medusa backend (`@medusajs/medusa` latest, Node 20+, PostgreSQL 15+) and an optional storefront (Next.js, Tanstack, etc...).
+Medusa DTC Starter — a Turborepo workspace monorepo containing a Medusa backend (`@medusajs/medusa` 2.21, Node 22.22+, PostgreSQL 15+, Redis) and a Next.js 15 storefront for the Écaille brand (French copy, dark mode). Local Postgres and Redis come from `docker-compose.yml`.
 
 ## Directory Structure
 
@@ -23,7 +23,8 @@ Medusa DTC Starter — a Turborepo workspace monorepo containing a Medusa backen
 │   │       └── workflows/        # Workflows and workflow steps
 │   └── storefront/               # OPTIONAL storefront
 ├── eslint.config.ts              # Root ESLint: @medusajs/eslint-plugin recommended
-├── turbo.json                    # Task graph: build, dev, start, lint, test, seed
+├── turbo.json                    # Task graph: build, dev, start, lint, typecheck, test, seed
+├── .github/workflows/ci.yml      # Lint, typecheck, tests and pnpm audit on every PR
 ```
 
 **`apps/storefront` is optional and may not exist.** It is skipped when the user chooses not to install it. Before running any storefront command, referencing storefront files, or assuming a full-stack change is possible, check that `apps/storefront/` exists. If it doesn't, the project is backend-only — do not scaffold it or suggest it was deleted by mistake.
@@ -68,17 +69,21 @@ Run from the repo root unless noted. Turbo skips missing apps automatically.
 ```bash
 <pm> run lint                          # all apps via turbo
 cd apps/backend && <pm> run lint       # medusa lint
-cd apps/storefront && <pm> run lint    # next lint
+cd apps/storefront && <pm> run lint    # eslint .
+<pm> run typecheck                     # tsc --noEmit in both apps
 ```
 
-### Test (backend only; the storefront has no test suite)
+### Test
 
 ```bash
 <pm> run test                                              # all test tasks via turbo
 cd apps/backend && <pm> run test:unit                      # **/src/**/__tests__/**/*.unit.spec.ts
 cd apps/backend && <pm> run test:integration:modules       # **/src/modules/*/__tests__/**
 cd apps/backend && <pm> run test:integration:http          # **/integration-tests/http/*.spec.ts
+cd apps/storefront && <pm> run test                        # Vitest, **/*.test.ts
 ```
+
+Backend unit tests live under `src/__tests__/`, not next to the code: Medusa loads every file under `src/search/` as an index, test files included.
 
 Single test — pass a path/pattern through to Jest, keeping `TEST_TYPE`:
 
@@ -94,7 +99,7 @@ cd apps/backend
 <pm> exec medusa db:generate <module-name>   # generate migrations for a custom module
 <pm> exec medusa db:migrate                  # run migrations
 <pm> exec medusa user -e admin@test.com -p supersecret
-<pm> run backend:seed                        # from root; seeds initial data
+<pm> run backend:seed                        # from root; seeds the Écaille catalogue (idempotent)
 ```
 
 ## Medusa Skills & MCP Server

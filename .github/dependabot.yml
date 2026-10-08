@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      medusa:
+        patterns: ["@medusajs/*"]
+      next:
+        patterns: ["next", "eslint-config-next"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
