@@ -1,6 +1,19 @@
-import { loadEnv, defineConfig } from '@medusajs/framework/utils'
+import { loadEnv, defineConfig, MedusaError } from '@medusajs/framework/utils'
 
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
+
+const DEV_SECRET = 'supersecret'
+
+function requireSecret(name: 'JWT_SECRET' | 'COOKIE_SECRET') {
+  const value = process.env[name]
+  if (process.env.NODE_ENV === 'production' && (!value || value === DEV_SECRET)) {
+    throw new MedusaError(
+      MedusaError.Types.INVALID_DATA,
+      `${name} must be set to a strong, non-default value in production`
+    )
+  }
+  return value
+}
 
 module.exports = defineConfig({
   projectConfig: {
@@ -10,8 +23,8 @@ module.exports = defineConfig({
       storeCors: process.env.STORE_CORS!,
       adminCors: process.env.ADMIN_CORS!,
       authCors: process.env.AUTH_CORS!,
-      jwtSecret: process.env.JWT_SECRET,
-      cookieSecret: process.env.COOKIE_SECRET,
+      jwtSecret: requireSecret('JWT_SECRET'),
+      cookieSecret: requireSecret('COOKIE_SECRET'),
     }
   }
 })
