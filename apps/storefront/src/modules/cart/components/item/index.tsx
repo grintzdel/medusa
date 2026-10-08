@@ -58,6 +58,8 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
             thumbnail={item.thumbnail}
             images={item.variant?.product?.images}
             size="square"
+            label={item.product_title ?? item.title}
+            tone={item.product?.metadata?.tin}
           />
         </LocalizedClientLink>
       </Table.Cell>

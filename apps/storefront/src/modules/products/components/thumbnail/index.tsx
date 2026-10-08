@@ -1,7 +1,8 @@
-import { Container, clx } from "@medusajs/ui"
+import { clx } from "@medusajs/ui"
 import Image from "next/image"
 import React from "react"
 
+import Tin from "@modules/common/components/tin"
 import PlaceholderImage from "@modules/common/icons/placeholder-image"
 
 type ThumbnailProps = {
@@ -10,6 +11,8 @@ type ThumbnailProps = {
   images?: any[] | null
   size?: "small" | "medium" | "large" | "full" | "square"
   isFeatured?: boolean
+  label?: string
+  tone?: unknown
   className?: string
   "data-testid"?: string
 }
@@ -19,18 +22,20 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   images,
   size = "small",
   isFeatured,
+  label,
+  tone,
   className,
   "data-testid": dataTestid,
 }) => {
   const initialImage = thumbnail || images?.[0]?.url
 
   return (
-    <Container
+    <div
       className={clx(
-        "relative w-full overflow-hidden p-4 bg-ui-bg-subtle shadow-elevation-card-rest rounded-large group-hover:shadow-elevation-card-hover transition-shadow ease-in-out duration-150",
+        "relative w-full overflow-hidden p-4 bg-ecaille-tuile transition-colors ease-in-out duration-150 group-hover:bg-ecaille-ligne/60",
         className,
         {
-          "aspect-[11/14]": isFeatured,
+          "aspect-[4/5]": isFeatured,
           "aspect-[9/16]": !isFeatured && size !== "square",
           "aspect-[1/1]": size === "square",
           "w-[180px]": size === "small",
@@ -41,19 +46,21 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
       )}
       data-testid={dataTestid}
     >
-      <ImageOrPlaceholder image={initialImage} size={size} />
-    </Container>
+      <ImageOrPlaceholder image={initialImage} size={size} label={label} tone={tone} />
+    </div>
   )
 }
 
 const ImageOrPlaceholder = ({
   image,
   size,
-}: Pick<ThumbnailProps, "size"> & { image?: string }) => {
+  label,
+  tone,
+}: Pick<ThumbnailProps, "size" | "label" | "tone"> & { image?: string }) => {
   return image ? (
     <Image
       src={image}
-      alt="Thumbnail"
+      alt={label ?? ""}
       className="absolute inset-0 object-cover object-center"
       draggable={false}
       quality={50}
@@ -61,8 +68,12 @@ const ImageOrPlaceholder = ({
       fill
     />
   ) : (
-    <div className="w-full h-full absolute inset-0 flex items-center justify-center">
-      <PlaceholderImage size={size === "small" ? 16 : 24} />
+    <div className="w-full h-full absolute inset-0 flex items-center justify-center p-[11%]">
+      {label ? (
+        <Tin label={label} tone={tone} />
+      ) : (
+        <PlaceholderImage size={size === "small" ? 16 : 24} />
+      )}
     </div>
   )
 }

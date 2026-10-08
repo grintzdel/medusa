@@ -5,20 +5,21 @@ import { Button, Container, Text } from "@medusajs/ui"
 
 const OnboardingCta = ({ orderId }: { orderId: string }) => {
   return (
-    <Container className="max-w-4xl h-full bg-ui-bg-subtle w-full">
+    <Container className="max-w-4xl h-full bg-ui-bg-subtle w-full rounded-none">
       <div className="flex flex-col gap-y-4 center p-4 md:items-center">
         <Text className="text-ui-fg-base text-xl">
-          Your test order was successfully created! 🎉
+          Votre commande de test a bien été créée ! 🎉
         </Text>
         <Text className="text-ui-fg-subtle text-small-regular">
-          You can now complete setting up your store in the admin.
+          Vous pouvez maintenant finaliser la configuration de votre boutique
+          dans l'admin.
         </Text>
         <Button
-          className="w-fit"
+          className="w-fit rounded-ctl"
           size="xlarge"
           onClick={() => resetOnboardingState(orderId)}
         >
-          Complete setup in admin
+          Finaliser la configuration dans l'admin
         </Button>
       </div>
     </Container>

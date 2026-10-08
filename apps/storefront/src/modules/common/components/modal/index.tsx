@@ -34,7 +34,7 @@ const Modal = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-opacity-75 backdrop-blur-md  h-screen" />
+          <div className="fixed inset-0 bg-ecaille-nuit/60 backdrop-blur-md h-screen" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-hidden">
@@ -65,7 +65,8 @@ const Modal = ({
                     "max-w-xl": size === "medium",
                     "max-w-3xl": size === "large",
                     "bg-transparent shadow-none": search,
-                    "bg-white shadow-xl border rounded-rounded": !search,
+                    "bg-ecaille-surface text-ecaille-encre shadow-xl border border-ecaille-ligne rounded-ctl":
+                      !search,
                   }
                 )}
               >
@@ -86,7 +87,12 @@ const Title: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     <Dialog.Title className="flex items-center justify-between">
       <div className="text-large-semi">{children}</div>
       <div>
-        <button onClick={close} data-testid="close-modal-button">
+        <button
+          onClick={close}
+          aria-label="Fermer"
+          className="text-ecaille-brume hover:text-ecaille-encre"
+          data-testid="close-modal-button"
+        >
           <X size={20} />
         </button>
       </div>
@@ -96,7 +102,7 @@ const Title: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const Description: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <Dialog.Description className="flex text-small-regular text-ui-fg-base items-center justify-center pt-2 pb-4 h-full">
+    <Dialog.Description className="flex text-small-regular text-ecaille-brume items-center justify-center pt-2 pb-4 h-full">
       {children}
     </Dialog.Description>
   )

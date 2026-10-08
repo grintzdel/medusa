@@ -1,5 +1,5 @@
 import { acceptTransferRequest } from "@lib/data/orders"
-import { Heading, Text } from "@medusajs/ui"
+import { Text } from "@medusajs/ui"
 import TransferImage from "@modules/order/components/transfer-image"
 
 export default async function TransferPage({
@@ -17,21 +17,24 @@ export default async function TransferPage({
       <div className="flex flex-col gap-y-6">
         {success && (
           <>
-            <Heading level="h1" className="text-xl text-zinc-900">
-              Order transfered!
-            </Heading>
-            <Text className="text-zinc-600">
-              Order {id} has been successfully transfered to the new owner.
+            <h1 className="ec-display text-[clamp(2rem,4vw,2.75rem)] text-ecaille-lien">
+              Commande transférée !
+            </h1>
+            <Text className="text-ui-fg-subtle">
+              La commande {id} a bien été transférée à son nouveau propriétaire.
             </Text>
           </>
         )}
         {!success && (
           <>
-            <Text className="text-zinc-600">
-              There was an error accepting the transfer. Please try again.
+            <Text className="text-ui-fg-subtle">
+              Une erreur est survenue lors de l&apos;acceptation du transfert.
+              Veuillez réessayer.
             </Text>
             {error && (
-              <Text className="text-red-500">Error message: {error}</Text>
+              <Text className="text-ecaille-piment">
+                Message d&apos;erreur : {error}
+              </Text>
             )}
           </>
         )}

@@ -5,11 +5,22 @@ import React, { useContext, useMemo, type JSX } from "react"
 import Radio from "@modules/common/components/radio"
 
 import { isManual } from "@lib/constants"
+import { useIsDarkTheme } from "@lib/hooks/use-is-dark-theme"
 import SkeletonCardDetails from "@modules/skeletons/components/skeleton-card-details"
 import { CardElement } from "@stripe/react-stripe-js"
 import { StripeCardElementOptions } from "@stripe/stripe-js"
 import PaymentTest from "../payment-test"
 import { StripeContext } from "../payment-wrapper/stripe-wrapper"
+
+const themeColor = (token: string, fallback: string) => {
+  if (typeof window === "undefined") {
+    return fallback
+  }
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(token)
+    .trim()
+  return value ? `rgb(${value})` : fallback
+}
 
 type PaymentContainerProps = {
   paymentProviderId: string
@@ -34,7 +45,7 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
       value={paymentProviderId}
       disabled={disabled}
       className={clx(
-        "flex flex-col gap-y-2 text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
+        "flex flex-col gap-y-2 text-small-regular cursor-pointer py-4 border rounded-ctl px-8 mb-2 hover:shadow-borders-interactive-with-active",
         {
           "border-ui-border-interactive":
             selectedPaymentOptionId === paymentProviderId,
@@ -79,23 +90,25 @@ export const StripeCardContainer = ({
   setCardComplete: (complete: boolean) => void
 }) => {
   const stripeReady = useContext(StripeContext)
+  const isDark = useIsDarkTheme()
 
   const useOptions: StripeCardElementOptions = useMemo(() => {
     return {
       style: {
         base: {
-          fontFamily: "Inter, sans-serif",
-          color: "#424270",
+          fontFamily: "system-ui, -apple-system, Segoe UI, sans-serif",
+          color: themeColor("--ec-encre", "rgb(16 26 58)"),
+          iconColor: themeColor("--ec-brume", "rgb(86 96 126)"),
           "::placeholder": {
-            color: "rgb(107 114 128)",
+            color: themeColor("--ec-brume", "rgb(86 96 126)"),
           },
         },
       },
       classes: {
-        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-ui-bg-field border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover transition-all duration-300 ease-in-out",
+        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-ui-bg-field border rounded-ctl appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover transition-all duration-300 ease-in-out",
       },
     }
-  }, [])
+  }, [isDark])
 
   return (
     <PaymentContainer
@@ -107,8 +120,8 @@ export const StripeCardContainer = ({
       {selectedPaymentOptionId === paymentProviderId &&
         (stripeReady ? (
           <div className="my-4 transition-all duration-150 ease-in-out">
-            <Text className="txt-medium-plus text-ui-fg-base mb-1">
-              Enter your card details:
+            <Text className="ec-eyebrow text-ui-fg-base mb-1">
+              Saisissez vos informations de carte
             </Text>
             <CardElement
               options={useOptions as StripeCardElementOptions}

@@ -25,8 +25,10 @@ const StoreTemplate = ({
     >
       <RefinementList sortBy={sort} />
       <div className="w-full">
-        <div className="mb-8 text-2xl-semi">
-          <h1 data-testid="store-page-title">All products</h1>
+        <div className="mb-8 border-b-2 border-ecaille-encre pb-3">
+          <h1 data-testid="store-page-title" className="ec-display text-[clamp(2.75rem,5vw,4rem)] text-ecaille-lien">
+            Toutes les conserves
+          </h1>
         </div>
         <Suspense fallback={<SkeletonProductGrid />}>
           <PaginatedProducts

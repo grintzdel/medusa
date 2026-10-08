@@ -12,7 +12,7 @@ function CartMismatchBanner(props: {
 }) {
   const { customer, cart } = props
   const [isPending, setIsPending] = useState(false)
-  const [actionText, setActionText] = useState("Run transfer again")
+  const [actionText, setActionText] = useState("Relancer le transfert")
 
   if (!customer || !!cart.customer_id) {
     return
@@ -21,28 +21,28 @@ function CartMismatchBanner(props: {
   const handleSubmit = async () => {
     try {
       setIsPending(true)
-      setActionText("Transferring..")
+      setActionText("Transfert en cours…")
 
       await transferCart()
     } catch {
-      setActionText("Run transfer again")
+      setActionText("Relancer le transfert")
       setIsPending(false)
     }
   }
 
   return (
-    <div className="flex items-center justify-center small:p-4 p-2 text-center bg-orange-300 small:gap-2 gap-1 text-sm mt-2 text-orange-800">
+    <div className="flex items-center justify-center small:p-4 p-2 text-center bg-ecaille-citron small:gap-2 gap-1 text-sm mt-2 text-ecaille-nuit">
       <div className="flex flex-col small:flex-row small:gap-2 gap-1 items-center">
         <span className="flex items-center gap-1">
           <ExclamationCircleSolid className="inline" />
-          Something went wrong when we tried to transfer your cart
+          Un problème est survenu lors du transfert de votre panier
         </span>
 
         <span>·</span>
 
         <Button
           variant="transparent"
-          className="hover:bg-transparent active:bg-transparent focus:bg-transparent disabled:text-orange-500 text-orange-950 p-0 bg-transparent"
+          className="hover:bg-transparent active:bg-transparent focus:bg-transparent disabled:text-ecaille-nuit/60 text-ecaille-nuit underline p-0 bg-transparent"
           size="base"
           disabled={isPending}
           onClick={handleSubmit}

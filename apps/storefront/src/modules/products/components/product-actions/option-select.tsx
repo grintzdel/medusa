@@ -4,6 +4,7 @@ import React from "react"
 
 type OptionSelectProps = {
   option: HttpTypes.StoreProductOption
+  variants?: HttpTypes.StoreProductVariant[] | null
   current: string | undefined
   updateOption: (title: string, value: string) => void
   title: string
@@ -13,17 +14,27 @@ type OptionSelectProps = {
 
 const OptionSelect: React.FC<OptionSelectProps> = ({
   option,
+  variants,
   current,
   updateOption,
   title,
   "data-testid": dataTestId,
   disabled,
 }) => {
-  const filteredOptions = (option.values ?? []).map((v) => v.value)
+  const usedValues = new Set(
+    (variants ?? []).flatMap((variant) =>
+      (variant.options ?? [])
+        .filter((variantOption) => variantOption.option_id === option.id)
+        .map((variantOption) => variantOption.value)
+    )
+  )
+  const filteredOptions = (option.values ?? [])
+    .map((v) => v.value)
+    .filter((value) => !variants || usedValues.has(value))
 
   return (
     <div className="flex flex-col gap-y-3">
-      <span className="text-sm">Select {title}</span>
+      <span className="ec-eyebrow">{title}</span>
       <div
         className="flex flex-wrap justify-between gap-2"
         data-testid={dataTestId}
@@ -34,11 +45,10 @@ const OptionSelect: React.FC<OptionSelectProps> = ({
               onClick={() => updateOption(option.id, v)}
               key={v}
               className={clx(
-                "border-ui-border-base bg-ui-bg-subtle border text-small-regular h-10 rounded-rounded p-2 flex-1 ",
+                "border-ecaille-ligne bg-ui-bg-base border text-sm h-10 rounded-ctl p-2 flex-1 transition-colors ease-in-out duration-150",
                 {
-                  "border-ui-border-interactive": v === current,
-                  "hover:shadow-elevation-card-rest transition-shadow ease-in-out duration-150":
-                    v !== current,
+                  "border-ecaille-outremer bg-ecaille-outremer text-white": v === current,
+                  "hover:border-ecaille-encre": v !== current,
                 }
               )}
               disabled={disabled}

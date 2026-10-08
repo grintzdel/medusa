@@ -14,19 +14,20 @@ const LineItemPrice = ({
   style = "default",
   currencyCode,
 }: LineItemPriceProps) => {
-  const { total, original_total } = item
+  const total = item.total ?? 0
+  const original_total = item.original_total ?? 0
   const originalPrice = original_total
   const currentPrice = total
   const hasReducedPrice = currentPrice < originalPrice
 
   return (
-    <div className="flex flex-col gap-x-2 text-ui-fg-subtle items-end">
+    <div className="flex flex-col gap-x-2 text-ui-fg-subtle items-end tabular-nums">
       <div className="text-left">
         {hasReducedPrice && (
           <>
             <p>
               {style === "default" && (
-                <span className="text-ui-fg-subtle">Original: </span>
+                <span className="text-ui-fg-subtle">Prix initial : </span>
               )}
               <span
                 className="line-through text-ui-fg-muted"
@@ -39,7 +40,7 @@ const LineItemPrice = ({
               </span>
             </p>
             {style === "default" && (
-              <span className="text-ui-fg-interactive">
+              <span className="text-ecaille-piment">
                 -{getPercentageDiff(originalPrice, currentPrice || 0)}%
               </span>
             )}
@@ -47,7 +48,7 @@ const LineItemPrice = ({
         )}
         <span
           className={clx("text-base-regular", {
-            "text-ui-fg-interactive": hasReducedPrice,
+            "text-ecaille-piment": hasReducedPrice,
           })}
           data-testid="product-price"
         >

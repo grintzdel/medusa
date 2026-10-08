@@ -24,22 +24,26 @@ const OrderCard = ({ order }: OrderCardProps) => {
   }, [order])
 
   return (
-    <div className="bg-white flex flex-col" data-testid="order-card">
-      <div className="uppercase text-large-semi mb-1">
-        #<span data-testid="order-display-id">{order.display_id}</span>
-      </div>
-      <div className="flex items-center divide-x divide-gray-200 text-small-regular text-ui-fg-base">
-        <span className="pr-2" data-testid="order-created-at">
-          {new Date(order.created_at).toDateString()}
+    <div className="bg-ui-bg-base flex flex-col" data-testid="order-card">
+      <h3 className="ec-heading mb-1 text-2xl text-ecaille-encre">
+        N°<span data-testid="order-display-id">{order.display_id}</span>
+      </h3>
+      <div className="flex items-center divide-x divide-ecaille-ligne text-small-regular text-ecaille-brume">
+        <span className="pr-2 font-mono text-xs" data-testid="order-created-at">
+          {new Date(order.created_at).toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
         </span>
-        <span className="px-2" data-testid="order-amount">
+        <span className="px-2 tabular-nums" data-testid="order-amount">
           {convertToLocale({
             amount: order.total,
             currency_code: order.currency_code,
           })}
         </span>
         <span className="pl-2">{`${numberOfLines} ${
-          numberOfLines > 1 ? "items" : "item"
+          numberOfLines > 1 ? "articles" : "article"
         }`}</span>
       </div>
       <div className="grid grid-cols-2 small:grid-cols-4 gap-4 my-4">
@@ -69,14 +73,14 @@ const OrderCard = ({ order }: OrderCardProps) => {
             <span className="text-small-regular text-ui-fg-base">
               + {numberOfLines - 4}
             </span>
-            <span className="text-small-regular text-ui-fg-base">more</span>
+            <span className="text-small-regular text-ui-fg-base">de plus</span>
           </div>
         )}
       </div>
       <div className="flex justify-end">
         <LocalizedClientLink href={`/account/orders/details/${order.id}`}>
           <Button data-testid="order-details-link" variant="secondary">
-            See details
+            Voir le détail
           </Button>
         </LocalizedClientLink>
       </div>

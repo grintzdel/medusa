@@ -27,10 +27,7 @@ type CountrySelectProps = {
 }
 
 const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
-  const [current, setCurrent] = useState<
-    | { country: string | undefined; region: string; label: string | undefined }
-    | undefined
-  >(undefined)
+  const [current, setCurrent] = useState<CountryOption | undefined>(undefined)
 
   const { countryCode } = useParams()
   const currentPath = usePathname().split(`/${countryCode}`)[1]
@@ -41,12 +38,13 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
     return regions
       ?.map((r) => {
         return r.countries?.map((c) => ({
-          country: c.iso_2,
+          country: c.iso_2 ?? "",
           region: r.id,
-          label: c.display_name,
+          label: c.display_name ?? "",
         }))
       })
       .flat()
+      .filter((option): option is CountryOption => Boolean(option?.country))
       .sort((a, b) => (a?.label ?? "").localeCompare(b?.label ?? ""))
   }, [regions])
 
@@ -75,7 +73,7 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
       >
         <ListboxButton className="py-1 w-full">
           <div className="txt-compact-small flex items-start gap-x-2">
-            <span>Shipping to:</span>
+            <span>Livraison vers :</span>
             {current && (
               <span className="txt-compact-small flex items-center gap-x-2">
                 {/* @ts-ignore */}
@@ -101,7 +99,7 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
             leaveTo="opacity-0"
           >
             <ListboxOptions
-              className="absolute -bottom-[calc(100%-36px)] left-0 xsmall:left-auto xsmall:right-0 max-h-[442px] overflow-y-scroll z-[900] bg-white drop-shadow-md text-small-regular uppercase text-black no-scrollbar rounded-rounded w-full"
+              className="absolute -bottom-[calc(100%-36px)] left-0 xsmall:left-auto xsmall:right-0 max-h-[442px] overflow-y-scroll z-[900] bg-ecaille-surface drop-shadow-md text-small-regular uppercase text-ecaille-encre no-scrollbar rounded-ctl border border-ecaille-ligne w-full"
               static
             >
               {options?.map((o, index) => {
@@ -109,7 +107,7 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
                   <ListboxOption
                     key={index}
                     value={o}
-                    className="py-2 hover:bg-gray-200 px-3 cursor-pointer flex items-center gap-x-2"
+                    className="py-2 hover:bg-ecaille-tuile data-[focus]:bg-ecaille-tuile px-3 cursor-pointer flex items-center gap-x-2"
                   >
                     {/* @ts-ignore */}
                     <ReactCountryFlag

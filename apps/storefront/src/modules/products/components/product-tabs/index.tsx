@@ -14,11 +14,11 @@ type ProductTabsProps = {
 const ProductTabs = ({ product }: ProductTabsProps) => {
   const tabs = [
     {
-      label: "Product Information",
+      label: "Traçabilité",
       component: <ProductInfoTab product={product} />,
     },
     {
-      label: "Shipping & Returns",
+      label: "Livraison et retours",
       component: <ShippingInfoTab />,
     },
   ]
@@ -41,40 +41,29 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
   )
 }
 
+const readMetadata = (product: HttpTypes.StoreProduct, key: string) => {
+  const value = product.metadata?.[key]
+  return typeof value === "string" ? value : "-"
+}
+
 const ProductInfoTab = ({ product }: ProductTabsProps) => {
+  const rows = [
+    { label: "Poids net", value: product.weight ? `${product.weight} g` : "-" },
+    { label: "Port de débarque", value: readMetadata(product, "port") },
+    { label: "Lot", value: readMetadata(product, "lot") },
+    { label: "À consommer de préférence avant", value: readMetadata(product, "ddm") },
+    { label: "Origine", value: product.origin_country?.toUpperCase() ?? "-" },
+  ]
+
   return (
-    <div className="text-small-regular py-8">
-      <div className="grid grid-cols-2 gap-x-8">
-        <div className="flex flex-col gap-y-4">
-          <div>
-            <span className="font-semibold">Material</span>
-            <p>{product.material ? product.material : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Country of origin</span>
-            <p>{product.origin_country ? product.origin_country : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Type</span>
-            <p>{product.type ? product.type.value : "-"}</p>
-          </div>
+    <dl className="grid grid-cols-1 gap-y-3 py-6 text-sm">
+      {rows.map((row) => (
+        <div key={row.label} className="flex justify-between gap-4 border-b border-ui-border-base pb-3">
+          <dt className="text-ecaille-brume">{row.label}</dt>
+          <dd className="font-mono text-xs uppercase text-ecaille-encre">{row.value}</dd>
         </div>
-        <div className="flex flex-col gap-y-4">
-          <div>
-            <span className="font-semibold">Weight</span>
-            <p>{product.weight ? `${product.weight} g` : "-"}</p>
-          </div>
-          <div>
-            <span className="font-semibold">Dimensions</span>
-            <p>
-              {product.length && product.width && product.height
-                ? `${product.length}L x ${product.width}W x ${product.height}H`
-                : "-"}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+      ))}
+    </dl>
   )
 }
 
@@ -85,31 +74,30 @@ const ShippingInfoTab = () => {
         <div className="flex items-start gap-x-2">
           <FastDelivery />
           <div>
-            <span className="font-semibold">Fast delivery</span>
+            <span className="font-semibold">Expédié sous 48 h</span>
             <p className="max-w-sm">
-              Your package will arrive in 3-5 business days at your pick up
-              location or in the comfort of your home.
+              Les colis partent de Quiberon et arrivent en 2 à 4 jours ouvrés, à
+              domicile ou en point relais. Livraison offerte dès 45 €.
             </p>
           </div>
         </div>
         <div className="flex items-start gap-x-2">
           <Refresh />
           <div>
-            <span className="font-semibold">Simple exchanges</span>
+            <span className="font-semibold">Boîte abîmée à la livraison</span>
             <p className="max-w-sm">
-              Is the fit not quite right? No worries - we&apos;ll exchange your
-              product for a new one.
+              Envoyez-nous une photo dans les 14 jours et nous renvoyons la
+              boîte, sans frais.
             </p>
           </div>
         </div>
         <div className="flex items-start gap-x-2">
           <Back />
           <div>
-            <span className="font-semibold">Easy returns</span>
+            <span className="font-semibold">Retours</span>
             <p className="max-w-sm">
-              Just return your product and we&apos;ll refund your money. No
-              questions asked – we&apos;ll do our best to make sure your return
-              is hassle-free.
+              Les boîtes non ouvertes sont reprises sous 14 jours. Le
+              remboursement est fait à réception.
             </p>
           </div>
         </div>

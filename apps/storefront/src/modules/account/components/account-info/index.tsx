@@ -22,7 +22,7 @@ const AccountInfo = ({
   isSuccess,
   isError,
   clearState,
-  errorMessage = "An error occurred, please try again",
+  errorMessage = "Une erreur est survenue, veuillez réessayer",
   children,
   'data-testid': dataTestid
 }: AccountInfoProps) => {
@@ -45,10 +45,10 @@ const AccountInfo = ({
     <div className="text-small-regular" data-testid={dataTestid}>
       <div className="flex items-end justify-between">
         <div className="flex flex-col">
-          <span className="uppercase text-ui-fg-base">{label}</span>
+          <span className="ec-eyebrow">{label}</span>
           <div className="flex items-center flex-1 basis-0 justify-end gap-x-4">
             {typeof currentInfo === "string" ? (
-              <span className="font-semibold" data-testid="current-info">{currentInfo}</span>
+              <span className="font-semibold text-ecaille-encre" data-testid="current-info">{currentInfo}</span>
             ) : (
               currentInfo
             )}
@@ -63,12 +63,11 @@ const AccountInfo = ({
             data-testid="edit-button"
             data-active={state}
           >
-            {state ? "Cancel" : "Edit"}
+            {state ? "Annuler" : "Modifier"}
           </Button>
         </div>
       </div>
 
-      {/* Success state */}
       <Disclosure>
         <Disclosure.Panel
           static
@@ -82,12 +81,11 @@ const AccountInfo = ({
           data-testid="success-message"
         >
           <Badge className="p-2 my-4" color="green">
-            <span>{label} updated succesfully</span>
+            <span>{label} : modification enregistrée</span>
           </Badge>
         </Disclosure.Panel>
       </Disclosure>
 
-      {/* Error state  */}
       <Disclosure>
         <Disclosure.Panel
           static
@@ -126,7 +124,7 @@ const AccountInfo = ({
                 type="submit"
                 data-testid="save-button"
               >
-                Save changes
+                Enregistrer
               </Button>
             </div>
           </div>
