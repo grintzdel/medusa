@@ -7,10 +7,12 @@ const DeleteButton = ({
   id,
   children,
   className,
+  "data-testid": dataTestId,
 }: {
   id: string
   children?: React.ReactNode
   className?: string
+  "data-testid"?: string
 }) => {
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -31,6 +33,8 @@ const DeleteButton = ({
       <button
         className="flex gap-x-1 text-ui-fg-subtle hover:text-ecaille-piment cursor-pointer"
         onClick={() => handleDelete(id)}
+        aria-label={children ? undefined : "Retirer l’article du panier"}
+        data-testid={dataTestId}
       >
         {isDeleting ? <Spinner className="animate-spin" /> : <Trash />}
         <span>{children}</span>
