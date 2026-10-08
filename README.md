@@ -21,16 +21,23 @@ pnpm install
 docker compose up -d                                   # Postgres + Redis sur 127.0.0.1
 
 cp apps/backend/.env.template apps/backend/.env        # pointe déjà sur le compose
+cp apps/storefront/.env.template apps/storefront/.env.local
 cd apps/backend
 pnpm exec medusa db:migrate                            # schéma + données initiales (régions, canal de vente)
-pnpm run seed                                          # catalogue Écaille (idempotent)
 pnpm exec medusa user -e admin@example.com -p <mot-de-passe>
 cd ../..
-
-cp apps/storefront/.env.template apps/storefront/.env.local
+pnpm backend:dev
 ```
 
-Lancer le backend (`pnpm backend:dev`), ouvrir l'admin sur <http://localhost:9000/app>, copier la clé dans *Settings → Publishable API Keys* et la coller dans `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` de `apps/storefront/.env.local`. Ensuite :
+Le premier démarrage remplit l'index de recherche produit : tant qu'il n'a pas eu lieu, toute création de produit échoue. Dans un second terminal, une fois le backend lancé :
+
+```bash
+cd apps/backend
+pnpm exec medusa exec ./src/scripts/remove-medusa-demo-products.ts   # retire le catalogue de démo Medusa
+pnpm run seed                                                        # catalogue Écaille (idempotent)
+```
+
+Ouvrir l'admin sur <http://localhost:9000/app>, copier la clé dans *Settings → Publishable API Keys* et la coller dans `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY` de `apps/storefront/.env.local`. Arrêter le backend, puis :
 
 ```bash
 pnpm dev                                               # backend :9000 + storefront :8000
@@ -47,9 +54,16 @@ La boutique répond sur <http://localhost:8000>.
 | `pnpm lint` | `medusa lint` + ESLint du storefront |
 | `pnpm typecheck` | `tsc --noEmit` sur les deux apps |
 | `pnpm test` | Jest (backend) + Vitest (storefront) |
+| `pnpm test:e2e` | Playwright sur une base jetable (voir ci-dessous) |
 | `pnpm backend:seed` | Catalogue Écaille |
 
-La CI (`.github/workflows/ci.yml`) lance lint, typecheck et tests sur chaque PR, plus un `pnpm audit` qui échoue sur toute vulnérabilité critique.
+La CI (`.github/workflows/ci.yml`) lance lint, typecheck, tests unitaires et E2E sur chaque PR, plus un `pnpm audit` qui échoue sur toute vulnérabilité critique.
+
+### Tests E2E
+
+`pnpm test:e2e` (script `scripts/e2e.sh`) ne touche jamais la base de dev. Il recrée une base `medusa_e2e` sur le Postgres du compose et utilise la base Redis n° 1. Il migre, démarre un backend de prod sur `:9001`, charge le catalogue, builde le storefront sur `:8001`, puis lance Playwright. Les arguments sont transmis à Playwright (`pnpm test:e2e --repeat-each=3`). Les logs des serveurs sont écrits dans `apps/storefront/.e2e-logs/`.
+
+Pour itérer sur un test contre le storefront de dev déjà lancé : `cd apps/storefront && pnpm test:e2e`. Attention, ce mode écrit dans la base de dev.
 
 ## Variables d'environnement
 
