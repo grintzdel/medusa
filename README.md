@@ -112,5 +112,6 @@ Voir [SECURITY.md](./SECURITY.md) pour signaler une faille et pour la liste des 
 |---|---|
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | Issues, branches, commits, PR, relecture, définition de « terminé » |
 | [docs/adr/](./docs/adr/README.md) | Décisions d'architecture et leurs compromis |
+| [docs/dossier/](./docs/dossier/) | Dossier technique en PDF : direction artistique, stack, architecture, modèle de données |
 | [SECURITY.md](./SECURITY.md) | Signalement de faille, protections en place, limites connues |
 | [AGENTS.md](./AGENTS.md) | Commandes et conventions, pour les agents de code comme pour les humains |
