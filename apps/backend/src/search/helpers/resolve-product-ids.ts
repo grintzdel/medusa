@@ -32,8 +32,8 @@ async function relatedProductIds(
     withDeleted,
   });
 
-  return (data as Record<string, any>[])
-    .flatMap(pick)
+  return (data as (Record<string, any> | null)[])
+    .flatMap((row) => (row ? pick(row) : []))
     .filter((id): id is string => Boolean(id));
 }
 
@@ -101,18 +101,18 @@ export async function resolveProductIds(
       return relatedProductIds(
         query,
         "product_option",
-        ["product_id"],
+        ["products.id"],
         ids,
-        (row) => [row.product_id],
+        (row) => (row.products ?? []).map((product: any) => product?.id),
         deleted,
       );
     case "product-option-value":
       return relatedProductIds(
         query,
         "product_option_value",
-        ["option.product_id"],
+        ["option.products.id"],
         ids,
-        (row) => [row.option?.product_id],
+        (row) => (row.option?.products ?? []).map((product: any) => product?.id),
         deleted,
       );
     case "product-tag":
