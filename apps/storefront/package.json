@@ -38,7 +38,7 @@
     "@medusajs/types": "2.21.2",
     "@medusajs/ui-preset": "2.21.2",
     "@playwright/test": "^1.64.0",
-    "@types/lodash": "^4.14.195",
+    "@types/lodash": "^4.17.26",
     "@types/node": "^22.18.0",
     "@types/react": "19.0.5",
     "@types/react-dom": "19.0.5",
